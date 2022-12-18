@@ -1,16 +1,22 @@
 local Config = {
+    Esp = true,
+    --text
+    TextOutline      = false,
+    TextColor        = Color3.fromRGB(255,255,255),
+    TextOutlineColor = Color3.fromRGB(0,0,0),
+    TextFont         = 2, -- 0,1,2,3
+    TexSize         = 13,
+    --box
     Box               = false,
     BoxOutline        = false,
     BoxColor          = Color3.fromRGB(255,255,255),
     BoxOutlineColor   = Color3.fromRGB(0,0,0),
+    --health
     HealthBar         = false,
     HealthBarSide     = "Left", -- Left,Bottom,Right
-    Names             = false,
-    NamesOutline      = false,
-    NamesColor        = Color3.fromRGB(255,255,255),
-    NamesOutlineColor = Color3.fromRGB(0,0,0),
-    NamesFont         = 2, -- 0,1,2,3
-    NamesSize         = 13
+    --name
+    Names               = false,
+
 }
 
 function CreateEsp(Player)
@@ -20,7 +26,8 @@ function CreateEsp(Player)
             local Target2dPosition,IsVisible = workspace.CurrentCamera:WorldToViewportPoint(Player.Character.HumanoidRootPart.Position)
             local scale_factor = 1 / (Target2dPosition.Z * math.tan(math.rad(workspace.CurrentCamera.FieldOfView * 0.5)) * 2) * 100
             local width, height = math.floor(40 * scale_factor), math.floor(60 * scale_factor)
-            if Config.Box then
+            --box
+            if Config.Box and Config.Esp then
                 Box.Visible = IsVisible
                 Box.Color = Config.BoxColor
                 Box.Size = Vector2.new(width,height)
@@ -41,20 +48,22 @@ function CreateEsp(Player)
                 Box.Visible = false
                 BoxOutline.Visible = false
             end
-            if Config.Names then
+            --name
+            if Config.Names and Config.Esp then
                 Name.Visible = IsVisible
-                Name.Color = Config.NamesColor
+                Name.Color = Config.TextColor
                 Name.Text = Player.Name.." "..math.floor((workspace.CurrentCamera.CFrame.p - Player.Character.HumanoidRootPart.Position).magnitude).."m"
                 Name.Center = true
-                Name.Outline = Config.NamesOutline
-                Name.OutlineColor = Config.NamesOutlineColor
+                Name.Outline = Config.TextOutline
+                Name.OutlineColor = Config.TextOutlineColor
                 Name.Position = Vector2.new(Target2dPosition.X,Target2dPosition.Y - height * 0.5 + -15)
-                Name.Font = Config.NamesFont
-                Name.Size = Config.NamesSize
+                Name.Font = Config.TextFont
+                Name.Size = Config.TextSize
             else
                 Name.Visible = false
             end
-            if Config.HealthBar then
+            --health
+            if Config.HealthBar and Config.Esp then
                 HealthBarOutline.Visible = IsVisible
                 HealthBarOutline.Color = Color3.fromRGB(0,0,0)
                 HealthBarOutline.Filled = true
@@ -89,6 +98,7 @@ function CreateEsp(Player)
                 HealthBarOutline.Visible = false
             end
         else
+            --shit
             Box.Visible = false
             BoxOutline.Visible = false
             Name.Visible = false
@@ -107,16 +117,17 @@ function CreateEsp(Player)
 end
 
 for _,v in pairs(game:GetService("Players"):GetPlayers()) do
-   if v ~= game:GetService("Players").LocalPlayer then
-      CreateEsp(v)
-      v.CharacterAdded:Connect(CreateEsp(v))
-   end
+    if v ~= game:GetService("Players").LocalPlayer then
+        CreateEsp(v)
+        v.CharacterAdded:Connect(CreateEsp(v))
+    end
 end
 
 game:GetService("Players").PlayerAdded:Connect(function(v)
-   if v ~= game:GetService("Players").LocalPlayer then
-      CreateEsp(v)
-      v.CharacterAdded:Connect(CreateEsp(v))
-   end
+    if v ~= game:GetService("Players").LocalPlayer then
+        CreateEsp(v)
+        v.CharacterAdded:Connect(CreateEsp(v))
+    end
 end)
+
 return Config
