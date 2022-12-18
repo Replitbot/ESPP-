@@ -1,4 +1,3 @@
--- made by rang#2415 or https://v3rmillion.net/member.php?action=profile&uid=1906262
 local Config = {
     --text
     TextOutline      = false,
@@ -14,7 +13,7 @@ local Config = {
     --health
     HealthBar         = false,
     HealthBarSide     = "Left", -- Left,Bottom,Right
-        --name
+    --name
     Names               = false,
 
 }
@@ -129,5 +128,3 @@ game:GetService("Players").PlayerAdded:Connect(function(v)
         v.CharacterAdded:Connect(CreateEsp(v))
     end
 end)
-
-return Config
