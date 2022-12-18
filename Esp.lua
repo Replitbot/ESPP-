@@ -128,3 +128,5 @@ game:GetService("Players").PlayerAdded:Connect(function(v)
         v.CharacterAdded:Connect(CreateEsp(v))
     end
 end)
+
+return Config
